@@ -2,6 +2,19 @@ const express = require("express")
 
 const app = express();
 
+app.get('/user', (req, res) => {
+    res.send({name: "sharath", age: "35", address: "Bengaluru"})
+})
+app.post('/user', (req, res) => {
+    res.send("Saved successfully")
+})
+app.patch('/user', (req, res) => {
+    res.send("User updated")
+})
+app.delete('/user', (req, res) => {
+    res.send("user deleted")
+})
+
 app.use('/test', (req, res) => {
     res.send("Hello from servers")
 })
