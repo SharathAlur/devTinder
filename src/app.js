@@ -1,19 +1,49 @@
 const express = require("express")
 
 const app = express();
-// /abc /ac
-app.get('/ab?c', (req, res) => {res.send('success')})
-// /abc, /abbbbbc
-app.get('/ab+c', (req, res) => {res.send('success')})
-// /abc, /ablasjdkflsdc
-app.get('/ab*c', (req, res) => {res.send('success')})
-// any route ends with c
-app.get('/.*c$', (req, res) => {res.send('success')})
 
-app.get('/user/:userId', (req, res) => {
-    console.log(req.query);
-    console.log(req.params)
-    res.send('success')
+// next will say, go to next matching handler. 
+app.get('/user', (req, res, next) => {
+    console.log('handler1');
+    next()
+}, (req, res, next) => {
+    console.log('Handler 2');
+    res.send('second handler responded')
+})
+
+// if res.send is not there, the req will hang.
+app.get('/user', (req, res, next) => {
+    console.log('handler1');
+    next()
+}, (req, res, next) => {
+    console.log('Handler 2');
+})
+
+// if next is there, and there are no more handler, it will throw, route not found.
+app.get('/user', (req, res, next) => {
+    console.log('handler1');
+    next()
+}, (req, res, next) => {
+    console.log('Handler 2');
+    next()
+})
+
+// handlers can be writtern  in combination with array
+app.get('/user', (req, res, next) => {
+    console.log('handler1');
+    next()
+}, [(req, res, next) => {
+    console.log('Handler 2');
+    next()
+}, (req, res, next) => {
+    console.log('Handler 2');
+    next()
+}, (req, res, next) => {
+    console.log('Handler 2');
+    next()
+}], (req, res, next) => {
+    console.log('Handler 2');
+    res.send('final output')
 })
 
 app.listen(7777, () => {
